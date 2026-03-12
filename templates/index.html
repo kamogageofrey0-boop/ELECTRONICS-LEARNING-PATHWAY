@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics Learning Pathway - Fundi Bots</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>🔌 Electronics Learning Pathway</h1>
+        <p class="subtitle">Fundi Bots - Interactive Electronics Education</p>
+        <div class="header-progress">
+            <span class="progress-text">Your Progress: {{ completed_count }}/{{ total_count }} Lessons Completed ({{ progress_percentage }}%)</span>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: {{ progress_percentage }}%;">
+                    {{ progress_percentage }}%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Main Learning Section -->
+        <div class="main-learning-section">
+            <div class="section-header">
+                <h2>📚 Learning Pathway</h2>
+                <p class="section-description">Complete each lesson in order. Click "Continue" on your current lesson to start learning.</p>
+            </div>
+
+            <div class="lessons-container">
+                {% for credential in credentials %}
+                <div class="lesson-card 
+                            {% if credential.id in completed_ids %}completed
+                            {% elif loop.index0 == current_index %}current
+                            {% else %}locked
+                            {% endif %}"
+                     {% if loop.index0 <= current_index %}onclick="location.href='{{ url_for('learn', credential_id=credential.id) }}'"{% endif %}>
+                    
+                    <!-- Card Header -->
+                    <div class="card-header">
+                        <div class="lesson-badge 
+                                    {% if credential.id in completed_ids %}completed
+                                    {% elif loop.index0 == current_index %}current
+                                    {% endif %}">
+                            {% if credential.id in completed_ids %}
+                                ✓
+                            {% else %}
+                                {{ credential.number }}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="lesson-title-area">
+                            <div class="lesson-icon-inline">{{ credential.icon }}</div>
+                            <h3 class="lesson-card-title">{{ credential.title }}</h3>
+                        </div>
+
+                        <div class="card-actions">
+                            {% if credential.id in completed_ids %}
+                                <span class="lesson-status completed">✓ Completed</span>
+                                <a href="{{ url_for('learn', credential_id=credential.id) }}" 
+                                   class="action-btn btn-review"
+                                   onclick="event.stopPropagation()">
+                                    Review
+                                </a>
+                            {% elif loop.index0 == current_index %}
+                                <span class="lesson-status current">⚡ Current</span>
+                                <a href="{{ url_for('learn', credential_id=credential.id) }}" 
+                                   class="action-btn btn-continue"
+                                   onclick="event.stopPropagation()">
+                                    Continue →
+                                </a>
+                            {% else %}
+                                <span class="lesson-status locked">🔒 Locked</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Learning Points -->
+                    <div class="learning-points">
+                        <p class="points-intro">What you'll learn:</p>
+                        <ul class="points-list">
+                            {% set objectives = credential.objective.split('; ') %}
+                            {% for point in objectives %}
+                            <li>{{ point.strip() }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Progress Button -->
+    <a href="{{ url_for('reset_progress') }}" 
+       class="reset-btn" 
+       onclick="return confirm('Are you sure you want to reset all progress?')">
+        🔄 Reset Progress
+    </a>
+</body>
+</html>
