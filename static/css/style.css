@@ -827,6 +827,30 @@ body {
     color: #FFFFFF;
 }
 
+/* === HOME LINK === */
+.home-link {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    padding: 12px 24px;
+    background: #FFFFFF;
+    color: #2D2D2D;
+    border: 2px solid #E9ECEF;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.home-link:hover {
+    background: #F8F9FA;
+    border-color: #F15A24;
+    color: #F15A24;
+}
+
 /* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
     .header h1 {
@@ -901,5 +925,16 @@ body {
     .image-gallery,
     .video-gallery {
         grid-template-columns: 1fr;
+    }
+    
+    .reset-btn,
+    .home-link {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        margin: 20px auto;
+        display: block;
+        width: fit-content;
     }
 }
